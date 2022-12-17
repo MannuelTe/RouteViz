@@ -61,11 +61,11 @@ def add_distances( route_df):
 
 def map_show(route_df):
 
-    lat_center = route_df.iloc[0][0]
-    lon_center = route_df.iloc[0][1]
+    lat_center = route_df.latitude.mean()
+    lon_center = route_df.longitude.mean()
     route_map = folium.Map(
         location=[lat_center, lon_center],
-        zoom_start=11,
+        zoom_start=9,
         tiles='OpenStreetMap',
         
     )
@@ -201,6 +201,6 @@ def elevationprof(route_df):
             title = "Elevation"
         )
     )
-
+    fig_elev_s.update_traces(line_smoothing=1.3)
     return(fig_elev_s)
     
