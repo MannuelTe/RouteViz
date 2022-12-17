@@ -10,14 +10,20 @@ import plotly.express as px
 import plotly.graph_objects as go
 import haversine as hs
 from streamlit_folium import st_folium
+import requests
+import io
 
 import func
+
+
+
+
 st.title("Vienna 2 Zurigo Route Viz tool")
 with st.sidebar:
     stage_nr = st.radio("Which stage?", (1,2,3,4,5,6,7,8))
-    with open (rf"C:\Users\trach\Desktop\routes trip\stage_{stage_nr}.gpx") as gpx_file:
-        gpx  = gpxpy.parse(gpx_file)
-
+    url = fr"https://raw.githubusercontent.com/MannuelTe/RouteViz/main/stage_{stage_nr}.gpx" # Make sure the url is the raw version of the file on GitHub
+    download = requests.get(url).content.decode("UTF-8")
+    gpx  = gpxpy.parse(download)
 ##route Upload:
 
 
