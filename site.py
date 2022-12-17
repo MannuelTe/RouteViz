@@ -50,14 +50,18 @@ st.set_page_config(
     }
 )
 
-my_bar = st.progress(0)
-st.title("Vienna 2 Zurigo Route Viz tool")
 
 with st.sidebar:
-    stage_nr = st.radio("Select the Stage", (1,2,3,4,5,6,7,8))
+    stage_name = st.radio("Select the Stage", stage_l)
+    stage_nr = stage_l.index(stage_name)+1
     url = fr"https://raw.githubusercontent.com/MannuelTe/RouteViz/main/stage_{stage_nr}.gpx" # Make sure the url is the raw version of the file on GitHub
     download = requests.get(url).content.decode("UTF-8")
     gpx  = gpxpy.parse(download)
+my_bar = st.progress(0)
+
+st.subheader("Vienna - Zurich Route")
+st.title(f"Stage {stage_nr}: {stage_name}")
+
 
 route_df = func.df_maker(gpx)
 my_bar.progress(10)
@@ -79,7 +83,6 @@ my_bar.progress(40)
 
 
 with st.container():
-    st.header(stage_l[stage_nr-1])
     st.subheader("Some info")
     st.write(stage_d[stage_nr-1])
     st.subheader("Key Facts")
