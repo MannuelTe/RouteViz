@@ -28,7 +28,7 @@ stage_l[7] = "Davos - Zürich"
 
 stage_d = [None]*8
 stage_d[0] = "The first stage gently introduces us to the Austrian alps, leading out of Vienna and through a plethora of small hills to the historic (?) town of Mariazell. We follow the so called Traisentalradweg on the last couple of ks. "
-stage_d[1] = "The second stage leaves in Mariazell and features a long descent into a national park before Arriving into Liezen."
+stage_d[1] = "The second stage leaves in Mariazell and features a long descent into a national park before Arriving into Liezen. Some of the stage follows the so called 'Ybbistalradweg'. "
 stage_d[2] = "Leaving Liezen, we cross a plateau in order to get to Bad Ischgl where we take on a mountainn pass to drop into Salzburg."
 stage_d[3] = "We climb into Germany after taking some backcountry roads and finally gettin back into Austria to overnight in Kufstein."
 stage_d[4] = "We again climb into Germany whereafter we turn south in order to drop into the Innsbruck vally where we pernoctate."
