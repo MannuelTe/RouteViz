@@ -100,8 +100,8 @@ if stage_nr < 9:
     ##show map
     
     st.title("Map")
-    col11, col22 = st.columns([1,1])
-    options = list(leafmap.basemaps.keys())
+    #col11, col22 = st.columns([1,1])
+    """ options = list(leafmap.basemaps.keys())
     index = options.index("CyclOSM")
     with col11:
         basemap = st.selectbox("Select a basemap:", options, index)
@@ -110,10 +110,10 @@ if stage_nr < 9:
         st.write('The current color is', coolr)
     m = func.improvedmap(route_df, coolr, options, index, basemap)
     
-    m.to_streamlit(height=900)
-    #map = func.map_show(route_df)
-    #my_bar.progress(60)
-    #st_folium(map)
+    m.to_streamlit(height=900) """
+    map = func.map_show(route_df)
+    my_bar.progress(60)
+    st_folium(map)
 
     ##make elevation profile:
     st.plotly_chart(func.elevationprof(route_df))
