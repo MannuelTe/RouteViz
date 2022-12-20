@@ -28,7 +28,7 @@ stage_l[7] = "Davos - Zürich"
 stage_l[8] = "Overview"
 
 
-stage_d = [None]*8
+stage_d = [None]*9
 stage_d[0] = "The first stage gently introduces us to the Austrian alps, leading out of Vienna and through a plethora of small hills to the historic (?) town of Mariazell."
 stage_d[1] = "The second stage leaves in Mariazell and features a long descent into a national park before Arriving into Liezen."
 stage_d[2] = "Leaving Liezen, we cross a plateau in order to get to Bad Ischgl where we take on a mountainn pass to drop into Salzburg."
@@ -37,7 +37,7 @@ stage_d[4] = "We again climb into Germany whereafter we turn south in order to d
 stage_d[5] = "Leaving Innsbruck, two HUGE increasingly harder passes await us, a long descent brings us into the Tirol Valley"
 stage_d[6] = "From the Tirol, we climb Stelvio, the obvious Cima Coppi, cross Zernez and make our way into Davos."
 stage_d[7] = "The last stage sees us leave Davos and descent along the Rhine before Climbing onto the Toggenburg Valley from where we reach Zurich. "
-
+stage_d[8] = "This is the general overview page"
 
 
 st.set_page_config(
@@ -101,16 +101,18 @@ if stage_nr < 9:
     
     st.title("Map")
     #col11, col22 = st.columns([1,1])
-    """ options = list(leafmap.basemaps.keys())
-    index = options.index("CyclOSM")
-    with col11:
-        basemap = st.selectbox("Select a basemap:", options, index)
-    with col22:
-        coolr = st.color_picker('Pick A Color', '#00f900')
-        st.write('The current color is', coolr)
-    m = func.improvedmap(route_df, coolr, options, index, basemap)
+#    options = list(leafmap.basemaps.keys())
+#    index = options.index("CyclOSM")
+#    with col11:
+#        basemap = st.selectbox("Select a basemap:", options, index)
+#    with col22:
+#        coolr = st.color_picker('Pick A Color', '#00f900')
+#        st.write('The current color is', coolr)
+#    m = func.improvedmap(route_df, coolr, options, index, basemap)
     
-    m.to_streamlit(height=900) """
+#    m.to_streamlit(height=900)
+
+
     map = func.map_show(route_df)
     my_bar.progress(60)
     st_folium(map)
@@ -124,21 +126,46 @@ if stage_nr < 9:
     
         
 else:
+    my_bar = st.progress(0)
+    for i in range(0,8):
+        my_bar.progress((i+1)*10)
+        if i == 0:
+            stage_nr = 1
+            url = fr"https://raw.githubusercontent.com/MannuelTe/RouteViz/main/stage_{stage_nr}.gpx" # Make sure the url is the raw version of the file on GitHub
+            download = requests.get(url).content.decode("UTF-8")
+            gpx  = gpxpy.parse(download)
+            base_df = func.df_maker(gpx)
+        else:
+            stage_nr = i +1     
+            url = fr"https://raw.githubusercontent.com/MannuelTe/RouteViz/main/stage_{stage_nr}.gpx" # Make sure the url is the raw version of the file on GitHub
+            download = requests.get(url).content.decode("UTF-8")
+            gpx  = gpxpy.parse(download)
+            base_df = base_df.append(func.df_maker(gpx))
+    base_df['elevation_diff'] = base_df['elevation'].diff()
+    my_bar.progress(85)
+    base_df = func.add_distances(base_df)
+    my_bar.progress(90)
+    base_df[base_df['elevation_diff'] >= 0]['elevation_diff'].sum()
+    base_df['distance'].sum()
+    base_df['cum_elevation'] = base_df['elevation_diff'].cumsum()
+    base_df['cum_distance'] = base_df['distance'].cumsum()
+    base_df = base_df.fillna(0)
+    with st.container():
+        st.subheader("Some info")
+        st.write(stage_d[stage_nr])
+        st.subheader("Key Facts")
+        col1, col2, col3 = st.columns(3)
+        col1.metric("Distance", f"{(base_df.cum_distance.max()/1000).round(2)} km", )
+        col2.metric("Elevation gain", f"{int(base_df[base_df['elevation_diff'] > 0]['elevation_diff'].sum().round())} m", f"Loss: {int(base_df[base_df['elevation_diff'] < 0]['elevation_diff'].sum().round())}", delta_color="inverse")
+        col3.metric("Highest point", f"{int(base_df.elevation.max().round(0))} m", f"Lowest: {int(base_df.elevation.min().round(0))} m", delta_color="inverse")
     
-    st.title("Interactive Map")
-
-    col1, col2 = st.columns([4, 1])
-    options = list(leafmap.basemaps.keys())
-    index = options.index("OpenTopoMap")
-
-    with col2:
-
-        basemap = st.selectbox("Select a basemap:", options, index)
-
-
-    with col1:
-
-        m = leafmap.Map(locate_control=True, latlon_control=True, draw_export=True, minimap_control=True)
-        m.add_basemap(basemap)
-        m.to_streamlit(height=700)
-        
+    my_bar.progress(92)
+    mapp = func.map_show(base_df)
+    my_bar.progress(94)
+    st_folium(mapp)
+    
+    #my_bar.progress(96)
+    #base_df = func.Gradientcalc(base_df)
+    #st.plotly_chart(func.elevationprof(base_df))
+    my_bar.progress(100)
+    
