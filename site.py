@@ -5,6 +5,7 @@ import gpxpy
 import gpxpy.gpx
 import matplotlib.pyplot as plt
 import folium
+import leafmap.foliumap as leafmap
 from IPython.display import display
 import plotly.express as px
 import plotly.graph_objects as go
@@ -15,7 +16,7 @@ import io
 
 import func
 
-stage_l = [None]*8
+stage_l = [None]*9
 stage_l[0] = "Wien - Mariazell"
 stage_l[1] = "Mariazell - Liezen"
 stage_l[2] = "Liezen - Salzburg"
@@ -24,11 +25,12 @@ stage_l[4] = "Kufstein - Innsbruck"
 stage_l[5] = "Innsbruck - Meran"
 stage_l[6] = "Meran - Davos"
 stage_l[7] = "Davos - Zürich"
+stage_l[8] = "Overview"
 
 
 stage_d = [None]*8
-stage_d[0] = "The first stage gently introduces us to the Austrian alps, leading out of Vienna and through a plethora of small hills to the historic (?) town of Mariazell. We follow the so called Traisentalradweg on the last couple of ks. "
-stage_d[1] = "The second stage leaves in Mariazell and features a long descent into a national park before Arriving into Liezen. Some of the stage follows the so called 'Ybbistalradweg' and the 'Mendlingtalrunde'. "
+stage_d[0] = "The first stage gently introduces us to the Austrian alps, leading out of Vienna and through a plethora of small hills to the historic (?) town of Mariazell."
+stage_d[1] = "The second stage leaves in Mariazell and features a long descent into a national park before Arriving into Liezen."
 stage_d[2] = "Leaving Liezen, we cross a plateau in order to get to Bad Ischgl where we take on a mountainn pass to drop into Salzburg."
 stage_d[3] = "We climb into Germany after taking some backcountry roads and finally gettin back into Austria to overnight in Kufstein."
 stage_d[4] = "We again climb into Germany whereafter we turn south in order to drop into the Innsbruck vally where we pernoctate."
@@ -54,51 +56,89 @@ st.set_page_config(
 with st.sidebar:
     stage_name = st.radio("Select the Stage", stage_l)
     stage_nr = stage_l.index(stage_name)+1
-    url = fr"https://raw.githubusercontent.com/MannuelTe/RouteViz/main/stage_{stage_nr}.gpx" # Make sure the url is the raw version of the file on GitHub
-    download = requests.get(url).content.decode("UTF-8")
-    gpx  = gpxpy.parse(download)
-my_bar = st.progress(0)
+    if stage_nr < 9:
+        url = fr"https://raw.githubusercontent.com/MannuelTe/RouteViz/main/stage_{stage_nr}.gpx" # Make sure the url is the raw version of the file on GitHub
+        download = requests.get(url).content.decode("UTF-8")
+        gpx  = gpxpy.parse(download)
+        
 
 st.subheader("Vienna - Zurich Route")
-st.title(f"Stage {stage_nr}: {stage_name}")
+if stage_nr < 9:
+    my_bar = st.progress(0)
+    st.title(f"Stage {stage_nr}: {stage_name}")
 
 
-route_df = func.df_maker(gpx)
-my_bar.progress(10)
-##compute elevations and distances
-route_df['elevation_diff'] = route_df['elevation'].diff()
-route_df = func.add_distances(route_df)
-my_bar.progress(20)
-route_df[route_df['elevation_diff'] >= 0]['elevation_diff'].sum()
-route_df['distance'].sum()
-route_df['cum_elevation'] = route_df['elevation_diff'].cumsum()
-route_df['cum_distance'] = route_df['distance'].cumsum()
-route_df = route_df.fillna(0)
+    route_df = func.df_maker(gpx)
+    my_bar.progress(10)
+    ##compute elevations and distances
+    route_df['elevation_diff'] = route_df['elevation'].diff()
+    route_df = func.add_distances(route_df)
+    my_bar.progress(20)
+    route_df[route_df['elevation_diff'] >= 0]['elevation_diff'].sum()
+    route_df['distance'].sum()
+    route_df['cum_elevation'] = route_df['elevation_diff'].cumsum()
+    route_df['cum_distance'] = route_df['distance'].cumsum()
+    route_df = route_df.fillna(0)
 
-##compute gradients
-route_df = func.Gradientcalc(route_df)
-my_bar.progress(30)
-grad_df = func.Gradientinterval(route_df)
-my_bar.progress(40)
-
-
-with st.container():
-    st.subheader("Some info")
-    st.write(stage_d[stage_nr-1])
-    st.subheader("Key Facts")
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Distance", f"{(route_df.cum_distance.max()/1000).round(2)} km", )
-    col2.metric("Elevation gain", f"{int(route_df[route_df['elevation_diff'] > 0]['elevation_diff'].sum().round())} m", f"Loss: {int(route_df[route_df['elevation_diff'] < 0]['elevation_diff'].sum().round())}", delta_color="inverse")
-    col3.metric("Highest point", f"{int(route_df.elevation.max().round(0))} m", f"Lowest: {int(route_df.elevation.min().round(0))} m", delta_color="inverse")
+    ##compute gradients
+    route_df = func.Gradientcalc(route_df)
+    my_bar.progress(30)
+    grad_df = func.Gradientinterval(route_df)
+    my_bar.progress(40)
 
 
-##show map
-map = func.map_show(route_df)
-my_bar.progress(60)
-st_folium(map)
+    with st.container():
+        st.subheader("Some info")
+        st.write(stage_d[stage_nr-1])
+        st.subheader("Key Facts")
+        col1, col2, col3 = st.columns(3)
+        col1.metric("Distance", f"{(route_df.cum_distance.max()/1000).round(2)} km", )
+        col2.metric("Elevation gain", f"{int(route_df[route_df['elevation_diff'] > 0]['elevation_diff'].sum().round())} m", f"Loss: {int(route_df[route_df['elevation_diff'] < 0]['elevation_diff'].sum().round())}", delta_color="inverse")
+        col3.metric("Highest point", f"{int(route_df.elevation.max().round(0))} m", f"Lowest: {int(route_df.elevation.min().round(0))} m", delta_color="inverse")
 
-##make elevation profile:
-st.plotly_chart(func.elevationprof(route_df))
-my_bar.progress(80)
-st.plotly_chart(func.Histmaker(grad_df))
-my_bar.progress(100)
+
+    ##show map
+    
+    st.title("Map")
+    col11, col22 = st.columns([1,1])
+    options = list(leafmap.basemaps.keys())
+    index = options.index("CyclOSM")
+    with col11:
+        basemap = st.selectbox("Select a basemap:", options, index)
+    with col22:
+        coolr = st.color_picker('Pick A Color', '#00f900')
+        st.write('The current color is', coolr)
+    m = func.improvedmap(route_df, coolr, options, index, basemap)
+    
+    m.to_streamlit(height=900)
+    #map = func.map_show(route_df)
+    #my_bar.progress(60)
+    #st_folium(map)
+
+    ##make elevation profile:
+    st.plotly_chart(func.elevationprof(route_df))
+    my_bar.progress(80)
+    st.plotly_chart(func.Histmaker(grad_df))
+    my_bar.progress(100)
+    ##########################
+    
+        
+else:
+    
+    st.title("Interactive Map")
+
+    col1, col2 = st.columns([4, 1])
+    options = list(leafmap.basemaps.keys())
+    index = options.index("OpenTopoMap")
+
+    with col2:
+
+        basemap = st.selectbox("Select a basemap:", options, index)
+
+
+    with col1:
+
+        m = leafmap.Map(locate_control=True, latlon_control=True, draw_export=True, minimap_control=True)
+        m.add_basemap(basemap)
+        m.to_streamlit(height=700)
+        

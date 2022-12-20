@@ -9,6 +9,8 @@ from IPython.display import display
 import plotly.express as px
 import plotly.graph_objects as go
 import haversine as hs
+import leafmap.foliumap as leafmap
+
 
 def df_maker ( gpx):
     route_info = []
@@ -204,3 +206,16 @@ def elevationprof(route_df):
     fig_elev_s.update_traces(line_smoothing=1.3)
     return(fig_elev_s)
     
+def improvedmap(route_df, coolr, index, options, basemap):
+    lat_center = route_df.latitude.mean()
+    lon_center = route_df.longitude.mean()
+    
+    
+    m = leafmap.Map(location=[lat_center, lon_center],
+        zoom_start=9,locate_control=True, latlon_control=True, draw_export=True, minimap_control=True)
+    m.add_basemap(basemap)
+    
+    coordinates = [tuple(x) for x in route_df[['latitude', 'longitude']].to_numpy()]
+    line = folium.PolyLine(coordinates, weight=4, color= coolr)
+    line.add_to(m)
+    return (m)
