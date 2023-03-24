@@ -2,7 +2,7 @@ folium==0.14.0
 gpxpy==1.5.0
 haversine==2.7.0
 ipython==8.7.0
-leafmap==0.14.1
+leafmap==0.18.5
 matplotlib==3.6.2
 numpy==1.23.5
 pandas==1.5.2
