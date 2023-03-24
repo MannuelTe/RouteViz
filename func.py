@@ -70,6 +70,7 @@ def map_show(route_df):
         zoom_start=9,
         tiles='OpenStreetMap',
         
+        
     )
 
     coordinates = [tuple(x) for x in route_df[['latitude', 'longitude']].to_numpy()]
