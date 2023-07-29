@@ -143,7 +143,8 @@ else:
             download = requests.get(url).content.decode("UTF-8")
             gpx  = gpxpy.parse(download)
             stage_df = func.df_maker(gpx)
-            base_df = base_df.append(stage_df)  
+            #base_df = base_df.append(stage_df)  
+            base_df = pd.concat([base_df, stage_df], ignore_index=True)
 
         stage_df = func.add_distances(stage_df)
         stage_df['elevation_diff'] = stage_df['elevation'].diff()    
