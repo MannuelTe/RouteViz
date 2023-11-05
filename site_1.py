@@ -16,7 +16,7 @@ import io
 
 import func
 
-stage_l = [None]*9
+stage_l = [None]*10
 stage_l[0] = "Wien - Mariazell"
 stage_l[1] = "Mariazell - Liezen"
 stage_l[2] = "Liezen - Salzburg"
@@ -25,10 +25,11 @@ stage_l[4] = "Kufstein - Innsbruck"
 stage_l[5] = "Innsbruck - Meran"
 stage_l[6] = "Meran - Davos"
 stage_l[7] = "Davos - Zürich"
-stage_l[8] = "Overview"
+stage_l[8] = "Homecoming"
+stage[9] ?= "Overview"
 
 
-stage_d = [None]*9
+stage_d = [None]*10
 stage_d[0] = "The first stage gently introduces us to the Austrian alps, leading out of Vienna and through a plethora of small hills to the historic (?) town of Mariazell."
 stage_d[1] = "The second stage leaves in Mariazell and features a long descent into a national park before Arriving into Liezen."
 stage_d[2] = "Leaving Liezen, we cross a plateau in order to get to Bad Ischgl where we take on a mountainn pass to drop into Salzburg."
@@ -38,6 +39,7 @@ stage_d[5] = "Leaving Innsbruck, two HUGE increasingly harder passes await us, a
 stage_d[6] = "From the Tirol, we climb Stelvio, the obvious Cima Coppi, cross Zernez and make our way into Davos."
 stage_d[7] = "The last stage sees us leave Davos and descent along the Rhine before Climbing onto the Toggenburg Valley from where we reach Zurich. "
 stage_d[8] = "This is the general overview page"
+stage_d[9] = "This is the actual overview"
 
 
 st.set_page_config(
@@ -63,7 +65,7 @@ with st.sidebar:
         
 
 st.subheader("Vienna - Zurich Route")
-if stage_nr < 9:
+if stage_nr < 10:
     my_bar = st.progress(0)
     st.title(f"Stage {stage_nr}: {stage_name}")
     route_df = func.df_maker(gpx)
@@ -128,7 +130,7 @@ else:
     distancelist = []
     elevlist= []
     peaklist = []
-    for i in range(0,8):
+    for i in range(0,9):
         my_bar.progress((i+1)*10)
         if i == 0:
             stage_nr = 1
