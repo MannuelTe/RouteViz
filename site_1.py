@@ -17,28 +17,28 @@ import io
 import func
 
 stage_l = [None]*10
-stage_l[0] = "Wien - Mariazell"
-stage_l[1] = "Mariazell - Liezen"
-stage_l[2] = "Liezen - Salzburg"
-stage_l[3] = "Salzburg - Kufstein"
-stage_l[4] = "Kufstein - Innsbruck"
-stage_l[5] = "Innsbruck - Meran"
-stage_l[6] = "Meran - Davos"
-stage_l[7] = "Davos - Zürich"
-stage_l[8] = "Homecoming"
+stage_l[0] = "Geneva -  Ambérieu"
+stage_l[1] = "Ambérieu - Saint-Etienne"
+stage_l[2] = "Saint-Etienne - Aubenas"
+stage_l[3] = "Aubenas - Mende"
+stage_l[4] = "Mende - Albi"
+stage_l[5] = "Ablbi - Limoux"
+stage_l[6] = "Limoux - Amdorra la V. "
+stage_l[7] = "Andorra la V. - Campordon"
+stage_l[8] = "Campordon - Sagaro"
 stage_l[9] = "Overview"
 
 
 stage_d = [None]*10
-stage_d[0] = "The first stage gently introduces us to the Austrian alps, leading out of Vienna and through a plethora of small hills to the historic (?) town of Mariazell."
-stage_d[1] = "The second stage leaves in Mariazell and features a long descent into a national park before Arriving into Liezen."
-stage_d[2] = "Leaving Liezen, we cross a plateau in order to get to Bad Ischgl where we take on a mountainn pass to drop into Salzburg."
-stage_d[3] = "We climb into Germany after taking some backcountry roads and finally gettin back into Austria to overnight in Kufstein."
-stage_d[4] = "We again climb into Germany whereafter we turn south in order to drop into the Innsbruck vally where we pernoctate."
-stage_d[5] = "Leaving Innsbruck, two HUGE increasingly harder passes await us, a long descent brings us into the Tirol Valley"
-stage_d[6] = "From the Tirol, we climb Stelvio, the obvious Cima Coppi, cross Zernez and make our way into Davos."
-stage_d[7] = "The last stage sees us leave Davos and descent along the Rhine before Climbing onto the Toggenburg Valley from where we reach Zurich. "
-stage_d[8] = "This is the general overview page"
+stage_d[0] = "Placeholder Description."
+stage_d[1] = "Placeholder Description."
+stage_d[2] = "Placeholder Description."
+stage_d[3] = "Placeholder Description."
+stage_d[4] = "Placeholder Description."
+stage_d[5] = "Placeholder Description."
+stage_d[6] = "Placeholder Description."
+stage_d[7] = "Placeholder Description."
+stage_d[8] = "Placeholder Description."
 stage_d[9] = "This is the actual overview"
 
 
