@@ -44,7 +44,7 @@ stage_d[9] = "This is the actual overview"
 
 st.set_page_config(
     layout="wide",
-    page_title="Vienna - Zhr Route Viz",
+    page_title="Geneva-Sagaro",
     page_icon="🧊",
     initial_sidebar_state="expanded",
     menu_items={
