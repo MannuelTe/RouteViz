@@ -131,7 +131,7 @@ else:
     elevlist= []
     peaklist = []
     for i in range(0,9):
-        my_bar.progress((i+1)*10)
+        my_bar.progress((i+1)*8)
         if i == 0:
             stage_nr = 1
             url = fr"https://raw.githubusercontent.com/MannuelTe/RouteViz/main/stage_{stage_nr}.gpx" # Make sure the url is the raw version of the file on GitHub
