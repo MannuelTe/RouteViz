@@ -58,7 +58,7 @@ st.set_page_config(
 with st.sidebar:
     stage_name = st.radio("Select the Stage", stage_l)
     stage_nr = stage_l.index(stage_name)+1
-    if stage_nr < 9: #downloads the stage in advance
+    if stage_nr < 10: #downloads the stage in advance
         url = fr"https://raw.githubusercontent.com/MannuelTe/RouteViz/main/stage_{stage_nr}.gpx" # Make sure the url is the raw version of the file on GitHub
         download = requests.get(url).content.decode("UTF-8")
         gpx  = gpxpy.parse(download)
