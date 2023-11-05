@@ -26,7 +26,7 @@ stage_l[5] = "Innsbruck - Meran"
 stage_l[6] = "Meran - Davos"
 stage_l[7] = "Davos - Zürich"
 stage_l[8] = "Homecoming"
-stage[9] ?= "Overview"
+stage_l[9] = "Overview"
 
 
 stage_d = [None]*10
