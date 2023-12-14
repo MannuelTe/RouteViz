@@ -190,5 +190,5 @@ else:
     st.write(elevlist)
     st.write(peaklist)
     stagelist = [f"stage {i+1}" for i in range(0,9)]
-    fig_scat = px.scatter(x= distancelist, y= elevlist, size= [i for i  in peaklist],color=stagelist)
+    fig_scat = px.scatter(x= distancelist, y= elevlist, size= [i[0] for i  in peaklist],color=stagelist)
     st.plotly_chart(fig_scat)
