@@ -186,9 +186,9 @@ else:
     #st.plotly_chart(func.elevationprof(base_df))
     my_bar.progress(100)
     st.subheader("Stages (colour) by elevation gain (y-axis), distance (x-axis) and highest point (sizes)")
-    st.write(distancelist)
-    st.write(elevlist)
-    st.write(peaklist)
+    #st.write(distancelist)
+    #st.write(elevlist)
+    #st.write(peaklist)
     stagelist = [f"stage {i+1}" for i in range(0,9)]
     fig_scat = px.scatter(x= distancelist, y= elevlist, size= [i[0] for i  in peaklist],color=stagelist)
     st.plotly_chart(fig_scat)
