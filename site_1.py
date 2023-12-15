@@ -30,7 +30,7 @@ stage_l[9] = "Overview"
 
 
 stage_d = [None]*10
-stage_d[0] = "Placeholder Description."
+stage_d[0] = "Leaving Sitzerland we head west and end up just before Lyon. Potential hotel: ibis budget Ambérieu-en-Bugey Château-Gaillard"
 stage_d[1] = "Placeholder Description."
 stage_d[2] = "Moving on the edge of the Massiv Central and occasionally dropping into the lowlands."
 stage_d[3] = "Placeholder"
